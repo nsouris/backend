@@ -7,7 +7,7 @@ const port = normalizePort(process.env.PORT || '1729');
 app.set('port', port);
 
 const server = app.listen(app.get('port'), () =>
-  console.log(`Express server listening on port:` + server.address().port)
+  console.log(`Express server listening on port :` + server.address().port)
 );
 
 server.on('error', onError);
