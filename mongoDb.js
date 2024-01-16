@@ -3,8 +3,8 @@ import { Emitter } from '@socket.io/mongo-emitter';
 
 mongoose.set('strictQuery', false);
 mongoose
- .connect(
-    `mongodb+srv://orionx7:i7HxupA9otqHGDWo@testcluster.t3fpgoc.mongodb.net/TestMinimal?retryWrites=true&w=majority`,
+   .connect(
+  `mongodb+srv://orionx7:WloFovQdp9AYuOce@mean.c0rsp.mongodb.net/Text?retryWrites=true&w=majority`,
     { useNewUrlParser: true, useUnifiedTopology: true }
   )
   .then(
