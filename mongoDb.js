@@ -4,7 +4,7 @@ import { Emitter } from '@socket.io/mongo-emitter';
 mongoose.set('strictQuery', false);
 mongoose
    .connect(
-  `mongodb+srv://primitivo:7ZuIFwncwAlka6oX@cluster0.qyvtcbt.mongodb.net/?retryWrites=true&w=majority`,
+  `mongodb+srv://primitivo:7ZuIFwncwAlka6oX@cluster0.qyvtcbt.mongodb.net/test?retryWrites=true&w=majority`,
     { useNewUrlParser: true, useUnifiedTopology: true }
   )
   .then(
