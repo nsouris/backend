@@ -3,8 +3,8 @@ import { Emitter } from '@socket.io/mongo-emitter';
 
 mongoose.set('strictQuery', false);
 mongoose
-   .connect(
-  `mongodb+srv://primitivo:7ZuIFwncwAlka6oX@cluster0.qyvtcbt.mongodb.net/test?retryWrites=true&w=majority`,
+  .connect(
+    `mongodb+srv://primitivo:7ZuIFwncwAlka6oX@cluster0.qyvtcbt.mongodb.net/test?retryWrites=true&w=majority`,
     { useNewUrlParser: true, useUnifiedTopology: true }
   )
   .then(
@@ -21,7 +21,7 @@ mongoose.set('toJSON', { virtuals: true });
 const DB = 'Socket';
 const COLLECTION = 'socket.io-adapter-events';
 const conn2 = mongoose.createConnection(
-   `mongodb+srv://primitivo:7ZuIFwncwAlka6oX@cluster0.qyvtcbt.mongodb.net/test?retryWrites=true&w=majority`,
+  `mongodb+srv://primitivo:7ZuIFwncwAlka6oX@cluster0.qyvtcbt.mongodb.net/${DB}?retryWrites=true&w=majority`,
   { useNewUrlParser: true, useUnifiedTopology: true }
 );
 
