@@ -31,11 +31,16 @@ app.patch('/', (req, res, next) => {
 app.patch('/', async (req, res) => {
   try {
     if (req.body.msg === 'F') throw new Error('wtF!@!');
+    if (req.body.roomId === 'cpuLoad') {
+      mySlowFunction(req.body.load); // higher number => more iterations => slower
+      return res.status(202).json('ok');
+    }
     const session = await Chat.startSession();
     await session.withTransaction(async () => {
       const doc = await Chat.findOne({ roomId: req.body.roomId }).session(
         session
       );
+      if (!doc) return;
       doc.messages.push(req.body.msg);
       await doc.save();
     });
@@ -57,3 +62,13 @@ app.post('/', async (req, res) => {
     res.status(517).json(error.message);
   }
 });
+
+function mySlowFunction(baseNumber) {
+  console.time('mySlowFunction');
+  let result = 0;
+  for (var i = Math.pow(baseNumber, 7); i >= 0; i--) {
+    result += Math.atan(i) * Math.tan(i);
+  }
+  console.timeEnd('mySlowFunction');
+  console.log(result);
+}
