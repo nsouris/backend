@@ -33,7 +33,9 @@ app.patch('/', async (req, res) => {
     if (req.body.msg === 'F') throw new Error('wtF!@!');
     const session = await Chat.startSession();
     await session.withTransaction(async () => {
-      const doc = await Chat.findOne({ roomId: 'minimal' }).session(session);
+      const doc = await Chat.findOne({ roomId: req.body.roomId }).session(
+        session
+      );
       doc.messages.push(req.body.msg);
       await doc.save();
     });
