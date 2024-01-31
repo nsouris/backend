@@ -5,16 +5,14 @@ import './mongoDb.js';
 
 const port = normalizePort(process.env.PORT || '2917');
 app.set('port', port);
-
 const server = app.listen(app.get('port'), () =>
-  console.log(`Express server listening on port :` + server.address().port)
+  console.log(`🤙 Express server listening on port :` + server.address().port)
 );
 
 server.on('error', onError);
 server.on('listening', onListening);
-
 /**
- * Normalize a port into a number, string, or false.
+ * Normalize a port into ra number, string, or false.
  */
 function normalizePort(val) {
   const port = parseInt(val, 10);

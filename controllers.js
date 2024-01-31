@@ -1,5 +1,9 @@
 import express from 'express';
 import { Chat } from './chat.model.js';
+import os from 'os';
+
+const hostName = os.hostname();
+const pid = process.pid;
 
 export const app = express();
 app.use(express.json());
@@ -21,6 +25,8 @@ app.use((req, res, next) => {
 app.use((req, _res, next) => {
   console.log('Requset method and url : ', req.method, req.url);
   console.log('Requset body:', req.body);
+  console.log('hosstName', hostName);
+  console.log('id', pid);
   next();
 });
 

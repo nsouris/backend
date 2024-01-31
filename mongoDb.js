@@ -8,8 +8,8 @@ mongoose
     { useNewUrlParser: true, useUnifiedTopology: true }
   )
   .then(
-    _ => console.log('Connection to Db Succesfull!'),
-    err => console.log('Somthing Went Wrong:', err)
+    () => console.log(`🌎 Connection to  Db Succesfull! 🌎`),
+    err => console.log(`🌞 Connection to Db failed`, err)
   );
 
 mongoose.connection.on('disconnected', () => {
