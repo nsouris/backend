@@ -1,6 +1,7 @@
 import express from 'express';
 import { Chat } from './chat.model.js';
 import os from 'os';
+import { appLogger } from './server.js';
 
 const hostName = os.hostname();
 const pid = process.pid;
@@ -23,10 +24,10 @@ app.use((req, res, next) => {
 });
 
 app.use((req, _res, next) => {
-  console.log('Requset method and url : ', req.method, req.url);
-  console.log('Requset body:', req.body);
-  console.log('hosstName', hostName);
-  console.log('id', pid);
+  appLogger('Requset method and url : ', req.method, req.url);
+  appLogger('Requset body:', req.body);
+  appLogger('hosstName', hostName);
+  appLogger('id', pid);
   next();
 });
 
@@ -53,7 +54,7 @@ app.patch('/', async (req, res) => {
     session.endSession();
     res.status(202).json('ok');
   } catch (error) {
-    console.log('🌞', error.message);
+    appLogger('🌞', error.message);
     res.status(517).json(error.message);
   }
 });
@@ -64,7 +65,7 @@ app.post('/', async (req, res) => {
     await doc.save();
     res.status(202).json('ok');
   } catch (error) {
-    console.log('🌞', error.message);
+    appLogger('🌞', error.message);
     res.status(517).json(error.message);
   }
 });
@@ -76,5 +77,5 @@ function mySlowFunction(baseNumber) {
     result += Math.atan(i) * Math.tan(i);
   }
   console.timeEnd('mySlowFunction');
-  console.log(result);
+  appLogger(result);
 }

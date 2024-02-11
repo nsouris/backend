@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
 import { Emitter } from '@socket.io/mongo-emitter';
+import { appLogger } from './server.js';
 
 mongoose.set('strictQuery', false);
 mongoose
@@ -8,12 +9,12 @@ mongoose
     { useNewUrlParser: true, useUnifiedTopology: true }
   )
   .then(
-    () => console.log(`🌎 Connection to  Db Succesfull! 🌎`),
-    err => console.log(`🌞 Connection to Db failed`, err)
+    () => appLogger(`🌎 Connection to  Db Succesfull! 🌎`),
+    err => appLogger(`🌞 Connection to Db failed`, err)
   );
 
 mongoose.connection.on('disconnected', () => {
-  console.log('Disconnected from Db!!!');
+  appLogger('Disconnected from Db!!!');
 });
 
 mongoose.set('toJSON', { virtuals: true });

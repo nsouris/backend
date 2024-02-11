@@ -1,13 +1,26 @@
+import os from 'os';
 import debug from 'debug';
+import appInsightsClient from './analytics.js';
 
 import { app } from './controllers.js';
 import './mongoDb.js';
 
+export const appLogger = debug('backend');
 const port = normalizePort(process.env.PORT || '2917');
+export const hostName = os.hostname();
+export const pid = process.pid;
 app.set('port', port);
-const server = app.listen(app.get('port'), () =>
-  console.log(`🤙 Express server listening on port :` + server.address().port)
-);
+
+export const server = app.listen(port, () => {
+  const info = `🤙 Express on ${hostName}, pid: ${pid}, listening on port:${
+    server.address().port
+  }`;
+  appLogger(info);
+  appInsightsClient.trackEvent({
+    name: '🔐 ' + 'BACKEND SERVER STARTED ID: ' + pid,
+    properties: { info },
+  });
+});
 
 server.on('error', onError);
 server.on('listening', onListening);

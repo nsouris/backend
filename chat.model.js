@@ -1,4 +1,5 @@
 import mongoose, { Schema } from 'mongoose';
+import appInsightsClient from './analytics.js';
 import { emitter } from './mongoDb.js';
 
 const chatSchema = new Schema(
@@ -9,7 +10,11 @@ const chatSchema = new Schema(
 const Chat = mongoose.model('chat', chatSchema);
 
 Chat.watch({ fullDocument: 'updateLookup' }).on('change', data => {
-  emitter.emit('update', data.fullDocument.messages);
+  appInsightsClient.trackEvent({
+    name: '🧧🧧 ' + 'STREAMING FROM PID:' + process.pid,
+    properties: { data },
+  });
+  emitter.emit('update', data.fullDocument.messages, process.pid);
 });
 
 export { Chat };
