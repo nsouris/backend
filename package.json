@@ -8,7 +8,9 @@
   },
   "main": "server.js",
   "scripts": {
-    "start": "nodemon -r dotenv/config server.js dotenv_config_path=./.env.development.local"
+    "start:dev": "nodemon -r dotenv/config server.js dotenv_config_path=./.env.development.local",
+    "start:prod": "nodemon -r dotenv/config server.js dotenv_config_path=./.env.production.local",
+    "start": "pm2 start server.js --no-daemon"
   },
   "dependencies": {
     "@socket.io/mongo-emitter": "^0.2.0",
