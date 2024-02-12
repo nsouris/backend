@@ -24,7 +24,7 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
 
       - name: npm install, build
-           run: |
+        run: |
           npm ci
           npm prune --omit=dev
 
