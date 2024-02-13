@@ -1,6 +1,7 @@
 import express from 'express';
 import { Chat } from './chat.model.js';
 import os from 'os';
+import appInsightsClient from './analytics.js';
 import { appLogger } from './server.js';
 
 const hostName = os.hostname();
@@ -59,6 +60,10 @@ app.patch('/', (req, res, next) => {
   next();
 });
 app.patch('/', async (req, res) => {
+  appInsightsClient.trackEvent({
+    name: `🔐🔐🔐Backend patch controler`,
+    properties: { backend: '🔐' + hostName, pid, requestIp: req.ip },
+  });
   try {
     if (req.body.msg === 'F') throw new Error('wtF!@!');
     if (req.body.roomId === 'cpuLoad') {
