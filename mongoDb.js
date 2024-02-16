@@ -1,20 +1,37 @@
 import mongoose from 'mongoose';
 import { Emitter } from '@socket.io/mongo-emitter';
+import appInsightsClient from './analytics.js';
+import os from 'os';
 import { appLogger } from './server.js';
+import { handler } from './errorHandler.js';
 
-mongoose.set('strictQuery', false);
-mongoose
-  .connect(
-    `mongodb+srv://primitivo:7ZuIFwncwAlka6oX@cluster0.qyvtcbt.mongodb.net/Minimal?retryWrites=true&w=majority`,
-    { useNewUrlParser: true, useUnifiedTopology: true }
-  )
-  .then(
-    () => appLogger(`🌎 Connection to  Db Succesfull! 🌎`),
-    err => appLogger(`🌞 Connection to Db failed`, err)
+const hostName = os.hostname();
+
+try {
+  mongoose.set('strictQuery', false); // if true only the fields that are specified in the Schema will be saved
+  await mongoose.connect(
+    `mongodb+srv://primitivo:7ZuIFwncwAlka6oX@cluster0.qyvtcbt.mongodb.net/Minimal?retryWrites=true&w=majority`
   );
+  const info = `🌎 Connection to  MainDb Succesfull! 🌎`;
+  appLogger(info);
+  appInsightsClient.trackEvent({
+    name: info,
+    properties: { backend: hostName, pid: process.pid },
+  });
+} catch (error) {
+  handler.handleError(error);
+  process.exit(0);
+}
 
 mongoose.connection.on('disconnected', () => {
-  appLogger('Disconnected from Db!!!');
+  appLogger(`🌞 Disconnected from MainDb`);
+  appInsightsClient.trackEvent({
+    name: `🌞 Disconnected from MainDb`,
+    properties: {
+      frontEnd: hostName,
+      pid: process.pid,
+    },
+  });
 });
 
 mongoose.set('toJSON', { virtuals: true });

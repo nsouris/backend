@@ -17,8 +17,8 @@ export const server = app.listen(port, () => {
   }`;
   appLogger(info);
   appInsightsClient.trackEvent({
-    name: '🔐 ' + 'BACKEND SERVER STARTED ID: ' + pid,
-    properties: { info },
+    name: '🔐 BACKEND SERVER STARTED',
+    properties: { hostName, pid },
   });
 });
 

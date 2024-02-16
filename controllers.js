@@ -3,6 +3,7 @@ import { Chat } from './chat.model.js';
 import os from 'os';
 import appInsightsClient from './analytics.js';
 import { appLogger } from './server.js';
+import { handler } from './errorHandler.js';
 
 const hostName = os.hostname();
 const pid = process.pid;
@@ -59,10 +60,10 @@ app.patch('/', (req, res, next) => {
   if (req.body.msg === 'Q') throw new Error('🌞UnCaught wtF!@!🌞');
   next();
 });
-app.patch('/', async (req, res) => {
+app.patch('/', async (req, res, next) => {
   appInsightsClient.trackEvent({
     name: `🔐🔐🔐Backend patch controler`,
-    properties: { backend: '🔐' + hostName, pid, requestIp: req.ip },
+    properties: { backend: hostName, pid, requestIp: req.ip },
   });
   try {
     if (req.body.msg === 'F') throw new Error('wtF!@!');
@@ -82,20 +83,22 @@ app.patch('/', async (req, res) => {
     session.endSession();
     res.status(202).json('ok');
   } catch (error) {
-    appLogger('🌞', error.message);
-    res.status(517).json(error.message);
+    next(error);
   }
 });
-app.post('/', async (req, res) => {
+app.post('/', async (req, res, next) => {
   try {
     const doc = await Chat.findOne({ roomId: 'minimal' });
     doc.messages = [];
     await doc.save();
     res.status(202).json('ok');
   } catch (error) {
-    appLogger('🌞', error.message);
-    res.status(517).json(error.message);
+    next(error);
   }
+});
+// eslint-disable-next-line no-unused-vars
+app.use(async (err, req, res, _next) => {
+  await handler.handleError(err, req, res);
 });
 
 function mySlowFunction(baseNumber) {
