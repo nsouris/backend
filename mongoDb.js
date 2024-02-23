@@ -7,11 +7,12 @@ import { handler } from './errorHandler.js';
 
 const hostName = os.hostname();
 const appLogger = debug('backend');
+const MAIN_DB = 'Minimal';
 
 try {
   mongoose.set('strictQuery', false); // if true only the fields that are specified in the Schema will be saved
   await mongoose.connect(
-    `${process.env.MONGODB_CONN_STRING}${DB}?retryWrites=true&w=majority`
+    `${process.env.MONGODB_CONN_STRING}${MAIN_DB}?retryWrites=true&w=majority&appName=Cluster0`
   );
   const info = `🌎 Connection to  MainDb Succesfull! 🌎`;
   appLogger(info);
@@ -20,7 +21,7 @@ try {
     properties: { backend: hostName, pid: process.pid },
   });
 } catch (error) {
-  handler.handleError(error);
+  handler.handleError(error, { originalUrl: ' Connection to mainDb' });
   process.exit(0);
 }
 
@@ -40,8 +41,7 @@ mongoose.set('toJSON', { virtuals: true });
 const DB = 'Socket';
 const COLLECTION = 'socket.io-adapter-events';
 const conn2 = mongoose.createConnection(
-  `mongodb+srv://primitivo:7ZuIFwncwAlka6oX@cluster0.qyvtcbt.mongodb.net/${DB}?retryWrites=true&w=majority`,
-  { useNewUrlParser: true, useUnifiedTopology: true }
+  `${process.env.MONGODB_CONN_STRING}${DB}?retryWrites=true&w=majority&appName=Cluster0`
 );
 
 const mongoCollection = conn2.collection(COLLECTION);
