@@ -2,10 +2,11 @@ import mongoose from 'mongoose';
 import { Emitter } from '@socket.io/mongo-emitter';
 import appInsightsClient from './analytics.js';
 import os from 'os';
-import { appLogger } from './server.js';
+import debug from 'debug';
 import { handler } from './errorHandler.js';
 
 const hostName = os.hostname();
+const appLogger = debug('backend');
 
 try {
   mongoose.set('strictQuery', false); // if true only the fields that are specified in the Schema will be saved

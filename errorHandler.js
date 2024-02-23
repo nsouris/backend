@@ -4,7 +4,7 @@ import os from 'os';
 
 export const hostName = os.hostname();
 export const pid = process.pid;
-const appLogger = debug('frontend');
+const appLogger = debug('backend');
 
 export class AppError extends Error {
   constructor(message, isOperational) {
