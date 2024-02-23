@@ -10,7 +10,7 @@ const hostName = os.hostname();
 try {
   mongoose.set('strictQuery', false); // if true only the fields that are specified in the Schema will be saved
   await mongoose.connect(
-    `mongodb+srv://primitivo:7ZuIFwncwAlka6oX@cluster0.qyvtcbt.mongodb.net/Minimal?retryWrites=true&w=majority`
+    `${process.env.MONGODB_CONN_STRING}${DB}?retryWrites=true&w=majority`
   );
   const info = `🌎 Connection to  MainDb Succesfull! 🌎`;
   appLogger(info);
