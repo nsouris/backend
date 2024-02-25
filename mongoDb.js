@@ -12,12 +12,11 @@ const MAIN_DB = 'Minimal';
 try {
   mongoose.set('strictQuery', false); // if true only the fields that are specified in the Schema will be saved
   await mongoose.connect(
-    `mongodb+srv://primitivo:Ba9BZNWELGt8XgkS@cluster0.qyvtcbt.mongodb.net/${MAIN_DB}?retryWrites=true&w=majority&appName=Cluster0`
+    `${process.env.MONGODB_CONN_STRING}${MAIN_DB}?retryWrites=true&w=majority&appName=Cluster0`
   );
-  const info = `🌎 Connection to  MainDb Succesfull! 🌎`;
-  appLogger(info);
+  appLogger(`🌎 Connection to  MainDb Succesfull! 🌎`);
   appInsightsClient.trackEvent({
-    name: info,
+    name: `🌎 Connection to  MainDb Succesfull! 🌎`,
     properties: { backend: hostName, pid: process.pid },
   });
 } catch (error) {
@@ -41,7 +40,7 @@ mongoose.set('toJSON', { virtuals: true });
 const DB = 'Socket';
 const COLLECTION = 'socket.io-adapter-events';
 const conn2 = mongoose.createConnection(
-  `mongodb+srv://primitivo:Ba9BZNWELGt8XgkS@cluster0.qyvtcbt.mongodb.net/${DB}?retryWrites=true&w=majority&appName=Cluster0`
+  `${process.env.MONGODB_CONN_STRING}${DB}?retryWrites=true&w=majority&appName=Cluster0`
 );
 
 const mongoCollection = conn2.collection(COLLECTION);
