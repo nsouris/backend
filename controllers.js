@@ -48,10 +48,10 @@ app.set('trust proxy', true); // to get the req.ip
 app.disable('x-powered-by'); // for hiding being an express app
 
 app.use((req, _res, next) => {
-  appLogger('Requset method and url : ', req.method, req.url);
-  appLogger('Requset body:', req.body);
+  appLogger('Request method and url : ', req.method, req.url);
+  appLogger('Request body:', req.body);
   appLogger('Client ip:', req.ip);
-  appLogger('hosstName', hostName);
+  appLogger('hostName', hostName);
   appLogger('id', pid);
   next();
 });

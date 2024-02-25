@@ -14,9 +14,9 @@ try {
   await mongoose.connect(
     `${process.env.MONGODB_CONN_STRING}${MAIN_DB}?retryWrites=true&w=majority&appName=Cluster0`
   );
-  appLogger(`🌎 Connection to  MainDb Succesfull! 🌎`);
+  appLogger(`🌎 Connection to  MainDb Succesful! 🌎`);
   appInsightsClient.trackEvent({
-    name: `🌎 Connection to  MainDb Succesfull! 🌎`,
+    name: `🌎 Connection to  MainDb Succesful! 🌎`,
     properties: { backend: hostName, pid: process.pid },
   });
 } catch (error) {

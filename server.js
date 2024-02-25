@@ -1,6 +1,6 @@
-import os from 'os';
-import debug from 'debug';
 import appInsightsClient from './analytics.js';
+import debug from 'debug';
+import os from 'os';
 
 import { app } from './controllers.js';
 import './mongoDb.js';
