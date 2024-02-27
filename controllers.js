@@ -61,10 +61,10 @@ app.patch('/', (req, res, next) => {
   next();
 });
 app.patch('/', async (req, res, next) => {
-  appInsightsClient.trackEvent({
-    name: `🔐🔐🔐Backend patch controler`,
-    properties: { backend: hostName, pid, requestIp: req.ip },
-  });
+  // appInsightsClient.trackEvent({
+  //   name: `🔐🔐🔐Backend patch controler`,
+  //   properties: { backend: hostName, pid, requestIp: req.ip },
+  // });
   try {
     if (req.body.msg === 'F') throw new Error('wtF!@!');
     if (req.body.roomId === 'cpuLoad') {
