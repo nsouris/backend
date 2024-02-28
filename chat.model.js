@@ -10,10 +10,10 @@ const chatSchema = new Schema(
 const Chat = mongoose.model('chat', chatSchema);
 
 Chat.watch({ fullDocument: 'updateLookup' }).on('change', data => {
-  appInsightsClient.trackEvent({
-    name: '🧧🧧 WATCH STREAM',
-    properties: { data, pid: process.pid },
-  });
+  // appInsightsClient.trackEvent({
+  //   name: '🧧🧧 WATCH STREAM',
+  //   properties: { data, pid: process.pid },
+  // });
   emitter.emit('update', data.fullDocument.messages, process.pid);
 });
 
