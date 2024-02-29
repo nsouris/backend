@@ -1,6 +1,6 @@
 import mongoose, { Schema } from 'mongoose';
-import appInsightsClient from './analytics.js';
 import { emitter } from './mongoDb.js';
+import { hostName } from './errorHandler.js';
 
 const chatSchema = new Schema(
   { roomId: { type: String }, messages: { type: Array } },
@@ -14,7 +14,7 @@ Chat.watch({ fullDocument: 'updateLookup' }).on('change', data => {
   //   name: '🧧🧧 WATCH STREAM',
   //   properties: { data, pid: process.pid },
   // });
-  emitter.emit('update', data.fullDocument.messages, process.pid);
+  emitter.emit('update', hostName, data.fullDocument.messages);
 });
 
 export { Chat };
