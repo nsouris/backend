@@ -7,6 +7,7 @@ import './mongoDb.js';
 import { errorHandler } from './errorHandler.js';
 
 export const appLogger = debug('backend');
+appLogger.color = 1;
 const port = normalizePort(process.env.PORT || '2917');
 export const hostName = os.hostname();
 export const pid = process.pid;

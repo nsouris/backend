@@ -2,7 +2,7 @@ import express from 'express';
 import { Chat } from './chat.model.js';
 import os from 'os';
 import { appLogger } from './server.js';
-import { handler } from './errorHandler.js';
+import { errorHandler } from './errorHandler.js';
 
 const hostName = os.hostname();
 const pid = process.pid;
@@ -85,10 +85,8 @@ app.post('/', async (req, res, next) => {
     next(error);
   }
 });
-// eslint-disable-next-line no-unused-vars
-app.use(async (err, req, res, _next) => {
-  await handler.handleError(err, req, res);
-});
+
+app.use(errorHandler.middleware);
 
 function mySlowFunction(baseNumber) {
   console.time('mySlowFunction');

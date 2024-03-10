@@ -7,6 +7,7 @@ import { errorHandler } from './errorHandler.js';
 
 const hostName = os.hostname();
 const appLogger = debug('backend');
+appLogger.color = 1;
 
 try {
   mongoose.set('strictQuery', false); // if true only the fields that are specified in the Schema will be saved
