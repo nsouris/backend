@@ -45,10 +45,28 @@ defaultConnection.on('disconnected', () => {
   });
 });
 
-const adapterConnection = mongoose.createConnection(
-  `${process.env.MONGODB_CONN_STRING}${process.env.ADAPTER_DB}?retryWrites=true&w=majority&appName=Cluster0`
-);
+mongoose
+  .createConnection(
+    `${process.env.MONGODB_CONN_STRING}${process.env.ADAPTER_DB}?retryWrites=true&w=majority&appName=Cluster0`
+  )
+  .asPromise()
+  .then(() => {
+    const name = `🌎 BackEnd connected to ${process.env.ADAPTER_DB} 🌎`;
+    appLogger(name);
+    appInsightsClient.trackEvent({
+      name,
+      properties: { backend: hostName, pid: process.pid },
+    });
+  })
+  .catch(error => {
+    errorHandler.handle(
+      error,
+      { isCritical: 0 },
+      `BackEnd Connection to ${process.env.ADAPTER_DB} error`
+    );
+  });
 
+const adapterConnection = mongoose.connections.at(1);
 export const adapterCollection = adapterConnection.collection(
   process.env.ADAPTER_COLLECTION
 );
