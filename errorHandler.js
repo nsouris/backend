@@ -1,33 +1,55 @@
+/* eslint-disable no-unused-vars */
 import appInsightsClient from './analytics.js';
 import debug from 'debug';
 import os from 'os';
 
-export const hostName = os.hostname();
-export const pid = process.pid;
+const hostName = os.hostname();
+const pid = process.pid;
 const appLogger = debug('backend');
+appLogger.color = 1;
 
-export class AppError extends Error {
-  constructor(message, isOperational) {
-    super();
-    this.message = message;
-    this.isOperational = isOperational;
-  }
-}
-class ErrorHandler {
+export const sendInfoNoTrack = {
+  cause: { skipTracking: true, sendInfo: true },
+};
+export const sendInfo = { cause: { sendInfo: true } };
+export const noTrack = { cause: { skipTracking: true } };
+class ΕrrorHandler {
   constructor() {
-    this.handleError = async (error, req = {}, res = {}) => {
-      appLogger(`🌞 ${req.originalUrl} error`, error.message);
+    this.handle = async (error, data, logInfo = '') => {
+      appLogger(`🌞 ${logInfo}:`, error.message || '');
       appInsightsClient.trackException({
         exception: error,
-        properties: {
-          body: req.body,
-          frontEnd: hostName,
-          pid,
-        },
+        properties: { backEnd: hostName, pid, data, stack: error.stack },
       });
-      if (res.locals) res.status(500).send(error.message);
+      if (!isNaN(data?.isCritical)) {
+        appLogger('🛑 critical error occured');
+        appInsightsClient.flush();
+        setTimeout(() => process.exit(data.isCritical), 1000);
+      }
+    };
+    this.middleware = async (error, req, res, _next) => {
+      appLogger(`🌞 ${req.originalUrl}:`, error.message);
+      if (!error.cause?.skipTracking) {
+        const data = {
+          body: req.body,
+          gameState: res.locals.gameState,
+          playerName: res.locals.playerName,
+        };
+        appInsightsClient.trackException({
+          exception: error,
+          properties: {
+            backend: hostName,
+            pid,
+            data,
+            stack: error.stack,
+          },
+        });
+      }
+      res.status(500).send({
+        message: error.cause?.sendInfo ? error.message : 'Server error',
+      });
     };
   }
 }
 
-export const handler = new ErrorHandler();
+export const errorHandler = new ΕrrorHandler();

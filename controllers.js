@@ -1,7 +1,6 @@
 import express from 'express';
 import { Chat } from './chat.model.js';
 import os from 'os';
-import appInsightsClient from './analytics.js';
 import { appLogger } from './server.js';
 import { handler } from './errorHandler.js';
 
@@ -9,7 +8,7 @@ const hostName = os.hostname();
 const pid = process.pid;
 
 export const app = express();
-app.use(express.json());
+app.use(express.json({ limit: '5kb' }));
 
 const HEADERS = {
   'Content-Security-Policy':
@@ -25,26 +24,16 @@ const HEADERS = {
   'X-Frame-Options': 'SAMEORIGIN',
   'X-Permitted-Cross-Domain-Policies': 'none',
   'X-XSS-Protection': '0',
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Headers':
+    'Origin, X-Requested-With, Content-Type, Accept, Authorization',
+  'Access-Control-Allow-Methods': 'GET, POST, PUT, PATCH,  OPTIONS',
+  'Access-Control-Expose-Headers': '*',
 };
 app.use((_req, res, next) => {
   res.set(HEADERS);
   next();
 });
-app.use((_req, res, next) => {
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader(
-    'Access-Control-Allow-Headers',
-    'Origin, X-Requested-With, Content-Type, Accept, Authorization'
-  );
-  res.setHeader(
-    'Access-Control-Allow-Methods',
-    'GET, POST, PUT, PATCH,  OPTIONS'
-  );
-  res.setHeader('Access-Control-Expose-Headers', '*');
-  next();
-});
-
-app.set('trust proxy', true); // to get the req.ip
 app.disable('x-powered-by'); // for hiding being an express app
 
 app.use((req, _res, next) => {
