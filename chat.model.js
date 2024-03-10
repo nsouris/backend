@@ -1,6 +1,8 @@
 import mongoose, { Schema } from 'mongoose';
 import { emitter } from './mongoDb.js';
-import { hostName } from './errorHandler.js';
+import os from 'os';
+
+const hostName = os.hostname();
 
 const chatSchema = new Schema(
   { roomId: { type: String }, messages: { type: Array } },
